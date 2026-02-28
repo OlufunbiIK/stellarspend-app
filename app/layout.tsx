@@ -25,6 +25,9 @@ export const metadata: Metadata = {
   },
 };
 
+import { NotificationProvider } from "@/context/NotificationContext";
+import { Toaster } from "@/components/notifications/Toast";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -33,7 +36,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
+        <NotificationProvider>
+          {children}
+          <Toaster />
+        </NotificationProvider>
       </body>
     </html>
   );
