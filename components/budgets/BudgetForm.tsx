@@ -12,7 +12,7 @@ const budgetSchema = z.object({
         .min(0.01, 'Minimum amount is 0.01'),
     category: z.string().min(1, 'Category is required'),
     period: z.enum(['daily', 'monthly', 'quarterly'], {
-        errorMap: () => ({ message: 'Please select a valid period' }),
+        message: 'Please select a valid period',
     }),
 });
 
