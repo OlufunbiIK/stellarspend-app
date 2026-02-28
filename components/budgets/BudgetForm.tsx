@@ -3,6 +3,7 @@
 import React from 'react';
 import { z } from 'zod';
 import { useForm } from '@/hooks/useForm';
+import { useOffline } from '@/components/offline/OfflineProvider';
 
 const budgetSchema = z.object({
     name: z.string().min(1, 'Budget name is required').max(50, 'Name is too long'),
@@ -11,18 +12,18 @@ const budgetSchema = z.object({
         .positive('Amount must be positive')
         .min(0.01, 'Minimum amount is 0.01'),
     category: z.string().min(1, 'Category is required'),
-    period: z.enum(['daily', 'monthly', 'quarterly'], {
-        errorMap: () => ({ message: 'Please select a valid period' }),
-    }),
+    period: z.enum(['daily', 'monthly', 'quarterly']),
 });
 
 type BudgetFormData = z.infer<typeof budgetSchema>;
 
 export default function BudgetForm() {
+    const { isOnline, queueAction } = useOffline();
     const {
         register,
         handleSubmit,
         formState: { errors, isValid, isSubmitting },
+        reset,
     } = useForm<BudgetFormData>({
         schema: budgetSchema,
         defaultValues: {
@@ -35,10 +36,18 @@ export default function BudgetForm() {
     });
 
     const onSubmit = async (data: BudgetFormData) => {
+        if (!isOnline) {
+            queueAction('CREATE_BUDGET', `Create budget: ${data.name}`, data);
+            alert('You are offline. Your budget has been queued and will be saved when you reconnect.');
+            reset();
+            return;
+        }
+
         // Simulate API call
         console.log('Budget submitted:', data);
         await new Promise((resolve) => setTimeout(resolve, 1000));
         alert('Budget saved successfully!');
+        reset();
     };
 
     return (
