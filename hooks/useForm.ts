@@ -10,7 +10,6 @@ import { z } from 'zod';
 
 /**
  * Configuration options for the useForm hook.
- * Extends the default React Hook Form options while making the schema required.
  */
 interface UseFormProps<TFieldValues extends FieldValues = FieldValues>
   extends Omit<UseHookFormProps<TFieldValues>, 'resolver'> {

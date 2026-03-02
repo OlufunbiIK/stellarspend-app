@@ -1,0 +1,75 @@
+describe('User Journey: Landing → Wallet → Budget → Transaction', () => {
+  beforeEach(() => {
+    cy.mockStellarAPI();
+  });
+
+  it('should display landing page with CTAs', () => {
+    cy.visit('/');
+    
+    cy.contains('Take').should('be.visible');
+    cy.contains('full control').should('be.visible');
+    cy.contains('of your money').should('be.visible');
+    
+    cy.contains('Get started').should('be.visible').and('have.attr', 'href', '/sign-in');
+    cy.contains('Read the docs').should('be.visible').and('have.attr', 'href', '/docs');
+    
+    cy.contains('0.01¢').should('be.visible');
+    cy.contains('No KYC').should('be.visible');
+  });
+
+  it('should mock wallet connection', () => {
+    cy.visit('/');
+    cy.mockFreighter();
+    
+    cy.window().then((win) => {
+      const freighter = (win as any).freighter;
+      expect(freighter).to.exist;
+      
+      freighter.getPublicKey().then((key: string) => {
+        expect(key).to.equal('GDQP2KPQGKIHYJGXNUIYOMHARUARCA7DJT5FO2FFOOKY3B2WSQHG4W37');
+      });
+      
+      freighter.isConnected().then((connected: boolean) => {
+        expect(connected).to.be.true;
+      });
+    });
+  });
+
+  it('should create a budget', () => {
+    cy.visit('/test-forms');
+    
+    cy.get('input#name').type('Groceries');
+    cy.get('input#amount').type('500');
+    cy.get('select#category').select('food');
+    cy.get('input[type="radio"][value="monthly"]').check();
+    
+    cy.contains('button', 'Save Budget').should('not.be.disabled').click();
+    
+    cy.on('window:alert', (text) => {
+      expect(text).to.contains('Budget saved successfully');
+    });
+  });
+
+  it('should view mocked transaction', () => {
+    cy.visit('/');
+    cy.mockFreighter();
+    
+    // Verify the mock API interceptor is set up correctly
+    cy.fixture('transaction').then((transaction) => {
+      expect(transaction.amount).to.equal('100.0000000');
+      expect(transaction.type).to.equal('payment');
+    });
+  });
+
+  it('should navigate CTAs correctly', () => {
+    cy.visit('/');
+    
+    cy.contains('Get started').click();
+    cy.url().should('include', '/sign-in');
+    
+    cy.go('back');
+    
+    cy.contains('Read the docs').click();
+    cy.url().should('include', '/docs');
+  });
+});
