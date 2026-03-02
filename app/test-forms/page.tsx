@@ -1,5 +1,7 @@
 import BudgetForm from '@/components/budgets/BudgetForm';
 import GoalForm from '@/components/savings/GoalForm';
+import { Card, CardHeader, CardBody } from '@/components/ui/Card';
+import { Grid } from '@/components/ui/Grid';
 
 export default function TestFormsPage() {
     return (
@@ -12,17 +14,25 @@ export default function TestFormsPage() {
                     </p>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-8">
-                    <section>
-                        <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Budget Form</h2>
-                        <BudgetForm />
-                    </section>
+                <Grid cols={1} gap="lg" responsive={{ md: 2 }}>
+                    <Card variant="default">
+                        <CardHeader>
+                            <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">Budget Form</h2>
+                        </CardHeader>
+                        <CardBody>
+                            <BudgetForm />
+                        </CardBody>
+                    </Card>
 
-                    <section>
-                        <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Goal Form</h2>
-                        <GoalForm />
-                    </section>
-                </div>
+                    <Card variant="default">
+                        <CardHeader>
+                            <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">Goal Form</h2>
+                        </CardHeader>
+                        <CardBody>
+                            <GoalForm />
+                        </CardBody>
+                    </Card>
+                </Grid>
             </div>
         </div>
     );

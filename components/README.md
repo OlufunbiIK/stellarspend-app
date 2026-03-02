@@ -1,5 +1,110 @@
 # Component Documentation
 
+## UI Components Library
+
+### `Card`
+A flexible card component with support for header, body, and footer slots.
+
+#### Path
+`components/ui/Card.tsx`
+
+#### Components
+- `Card`: Main container component
+- `CardHeader`: Optional header section
+- `CardBody`: Main content area
+- `CardFooter`: Optional footer section
+
+#### Props
+- `className?: string` - Additional CSS classes
+- `variant?: 'default' | 'outlined' | 'elevated'` - Visual style variant
+
+#### Variants
+- `default`: White background with subtle border
+- `outlined`: Transparent background with prominent border
+- `elevated`: White background with shadow, no border
+
+#### Usage Example
+```tsx
+import { Card, CardHeader, CardBody, CardFooter } from '@/components/ui/Card';
+
+export function Example() {
+  return (
+    <Card variant="elevated" className="max-w-md">
+      <CardHeader>
+        <h2 className="text-xl font-bold">Card Title</h2>
+      </CardHeader>
+      <CardBody>
+        <p>This is the main content of the card.</p>
+      </CardBody>
+      <CardFooter>
+        <button>Action</button>
+      </CardFooter>
+    </Card>
+  );
+}
+```
+
+### `Grid`
+A responsive grid layout component with flexible column configurations.
+
+#### Path
+`components/ui/Grid.tsx`
+
+#### Props
+- `className?: string` - Additional CSS classes
+- `cols?: 1 | 2 | 3 | 4 | 6 | 12` - Number of columns (default: 1)
+- `gap?: 'sm' | 'md' | 'lg' | 'xl'` - Spacing between grid items (default: 'md')
+- `responsive?: { sm?, md?, lg?, xl? }` - Responsive column configuration per breakpoint
+
+#### Usage Example
+```tsx
+import { Grid } from '@/components/ui/Grid';
+
+export function Example() {
+  return (
+    <Grid 
+      cols={1} 
+      gap="lg"
+      responsive={{ sm: 2, md: 3, lg: 4 }}
+      className="w-full"
+    >
+      <div>Item 1</div>
+      <div>Item 2</div>
+      <div>Item 3</div>
+      <div>Item 4</div>
+    </Grid>
+  );
+}
+```
+
+### `Stack`
+A flexible layout component for arranging items vertically or horizontally with consistent spacing.
+
+#### Path
+`components/ui/Stack.tsx`
+
+#### Props
+- `className?: string` - Additional CSS classes
+- `direction?: 'horizontal' | 'vertical'` - Stack direction (default: 'vertical')
+- `spacing?: 'sm' | 'md' | 'lg' | 'xl'` - Space between items (default: 'md')
+- `align?: 'start' | 'center' | 'end' | 'stretch'` - Cross-axis alignment (default: 'stretch')
+- `justify?: 'start' | 'center' | 'end' | 'between' | 'around'` - Main-axis alignment (default: 'start')
+
+#### Usage Example
+```tsx
+import { Stack } from '@/components/ui/Stack';
+
+export function Example() {
+  return (
+    <Stack direction="vertical" spacing="lg" align="center">
+      <h1>Title</h1>
+      <p>Description</p>
+      <button>Action</button>
+    </Stack>
+  );
+}
+```
+
 ## Shared Hooks
 
 ### `useForm`

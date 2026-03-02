@@ -3,62 +3,11 @@
 import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowRight, BookOpen } from 'lucide-react';
+import { ArrowRight, BookOpen, Bell } from 'lucide-react';
+import { useNotifications } from '@/context/NotificationContext';
+import { NotificationsCenter } from '@/components/notifications/NotificationsCenter';
 
-function Starfield() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    let animId: number;
-
-    const resize = () => {
-      canvas.width  = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    resize();
-    window.addEventListener('resize', resize);
-
-    const stars = Array.from({ length: 160 }, () => ({
-      x:     Math.random(),
-      y:     Math.random(),
-      r:     Math.random() * 1.2 + 0.3,
-      alpha: Math.random() * 0.6 + 0.1,
-      speed: Math.random() * 0.0004 + 0.0001,
-      phase: Math.random() * Math.PI * 2,
-    }));
-
-    const draw = (t: number) => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (const s of stars) {
-        const flicker = s.alpha + Math.sin(t * s.speed * 1000 + s.phase) * 0.15;
-        ctx.beginPath();
-        ctx.arc(s.x * canvas.width, s.y * canvas.height, s.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(200,220,255,${Math.max(0, flicker)})`;
-        ctx.fill();
-      }
-      animId = requestAnimationFrame(draw);
-    };
-
-    animId = requestAnimationFrame(draw);
-    return () => {
-      cancelAnimationFrame(animId);
-      window.removeEventListener('resize', resize);
-    };
-  }, []);
-
-  return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 z-0 pointer-events-none"
-      aria-hidden="true"
-    />
-  );
-}
+import { Starfield } from '@/components/ui/Starfield';
 
 const fadeUp = {
   hidden:  { opacity: 0, y: 24 },
@@ -70,11 +19,15 @@ const stagger = {
 };
 
 export default function Hero() {
+  const { addNotification } = useNotifications();
   return (
     <section
       className="relative w-full min-h-screen flex items-center justify-center overflow-hidden px-6 py-24"
       aria-label="StellarSpend hero section"
     >
+      <div className="absolute top-6 right-6 z-50">
+        <NotificationsCenter />
+      </div>
       <Starfield />
 
       {/* Glow orbs — fixed pixel sizes, truly absolute so they don't affect layout */}
@@ -161,10 +114,10 @@ export default function Hero() {
           transition={{ duration: 0.5, ease: 'easeOut' }}
         >
           {/* Primary */}
-          <Link
-            href="/sign-in"
-            aria-label="Get started — go to sign in"
-            className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full font-semibold text-base transition-all duration-200
+          <button
+            onClick={() => addNotification('success', 'Welcome to StellarSpend! Your journey to financial freedom starts here.')}
+            aria-label="Get started"
+            className="inline-flex items-center gap-2.5 px-6 py-2.5 rounded-full font-semibold text-base transition-all duration-200
                        bg-[#e8b84b] text-[#1a0f00]
                        hover:bg-[#f0c85a] hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(232,184,75,0.35)]
                        active:translate-y-0
@@ -172,22 +125,18 @@ export default function Hero() {
           >
             Get started
             <ArrowRight size={18} aria-hidden="true" />
-          </Link>
+          </button>
 
           {/* Secondary */}
-          <Link
-            href="/docs"
-            role="button"
-            aria-label="Read the documentation"
-            className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full font-medium text-base transition-all duration-200
-                       border border-white/10 text-[#e8edf8]
-                       hover:border-white/25 hover:bg-white/5 hover:-translate-y-0.5
-                       active:translate-y-0
-                       focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#e8b84b] focus-visible:outline-offset-2"
+          <button
+            onClick={() => addNotification('error', 'Simulation: Transaction failed due to insufficient XLM.')}
+            className="inline-flex items-center gap-2.5 px-6 py-2.5 rounded-full font-medium text-base transition-all duration-200
+                       border border-red-500/30 text-red-400 bg-red-500/5
+                       hover:border-red-500/50 hover:bg-red-500/10 hover:-translate-y-0.5
+                       active:translate-y-0"
           >
-            <BookOpen size={17} aria-hidden="true" />
-            Read the docs
-          </Link>
+            Simulate Error
+          </button>
         </motion.div>
         {/* Divider */}
         <motion.div
