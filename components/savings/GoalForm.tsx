@@ -3,6 +3,7 @@
 import React from 'react';
 import { z } from 'zod';
 import { useForm } from '@/hooks/useForm';
+import { useOffline } from '@/components/offline/OfflineProvider';
 
 const goalSchema = z.object({
     title: z.string().min(1, 'Goal title is required').max(100, 'Title is too long'),
@@ -21,11 +22,14 @@ const goalSchema = z.object({
 type GoalFormData = z.infer<typeof goalSchema>;
 
 export default function GoalForm() {
+    const { isOnline, queueAction } = useOffline();
     const {
         register,
         handleSubmit,
         formState: { errors, isValid, isSubmitting },
     } = useForm({
+        reset,
+    } = useForm<GoalFormData>({
         schema: goalSchema,
         defaultValues: {
             title: '',
@@ -36,10 +40,18 @@ export default function GoalForm() {
     });
 
     const onSubmit = async (data: GoalFormData) => {
+        if (!isOnline) {
+            queueAction('CREATE_GOAL', `Create goal: ${data.title}`, data);
+            alert('You are offline. Your goal has been queued and will be saved when you reconnect.');
+            reset();
+            return;
+        }
+
         // Simulate API call
         console.log('Goal submitted:', data);
         await new Promise((resolve) => setTimeout(resolve, 1000));
         alert('Savings goal created successfully!');
+        reset();
     };
 
     return (
