@@ -39,7 +39,15 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans`}>
         <ClientLayout>
         <NotificationProvider>
-          {children}
+          <a 
+            href="#main-content" 
+            className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-[#e8b84b] text-[#1a0f00] px-4 py-2 rounded-md font-semibold z-50 focus:outline-none focus:ring-2 focus:ring-[#e8b84b] focus:ring-offset-2 focus:ring-offset-[#080b18]"
+          >
+            Skip to main content
+          </a>
+          <div id="main-content">
+            {children}
+          </div>
           <Toaster />
         </NotificationProvider> 
         </ClientLayout>
