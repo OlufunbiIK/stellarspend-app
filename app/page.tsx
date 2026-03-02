@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import Hero from '@/components/hero/Hero';
+import FeaturesSection from '@/components/features/FeaturesSection';
+import TestimonialsSection from '@/components/testimonials/TestimonialsSection';
 import { Card, CardHeader, CardBody } from '@/components/ui/Card';
 import { Grid } from '@/components/ui/Grid';
 
@@ -19,6 +21,8 @@ export default function HomePage() {
   return (
     <main id="main-content">
       <Hero />
+      <FeaturesSection />
+      <TestimonialsSection />
 
       <section id="features" aria-label="Features overview" className="py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
