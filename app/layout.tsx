@@ -4,6 +4,7 @@ import "./globals.css";
 import ClientLayout from "@/components/ClientLayout";
 import { NotificationProvider } from "@/context/NotificationContext";
 import { Toaster } from "@/components/notifications/Toast";
+import { I18nProvider } from "@/components/I18nProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,12 +38,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans`}>
-        <ClientLayout>
-        <NotificationProvider>
-          {children}
-          <Toaster />
-        </NotificationProvider> 
-        </ClientLayout>
+        <I18nProvider initialLanguage="en">
+          <ClientLayout>
+            <NotificationProvider>
+              {children}
+              <Toaster />
+            </NotificationProvider> 
+          </ClientLayout>
+        </I18nProvider>
       </body>
     </html>
   );
