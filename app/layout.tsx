@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ClientLayout from "@/components/ClientLayout";
 import { NotificationProvider } from "@/context/NotificationContext";
+import { WalletProvider } from "@/context/WalletContext";
 import { Toaster } from "@/components/notifications/Toast";
 import { I18nProvider } from "@/components/I18nProvider";
 
@@ -29,7 +30,6 @@ export const metadata: Metadata = {
   },
 };
 
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -41,9 +41,11 @@ export default function RootLayout({
         <I18nProvider initialLanguage="en">
           <ClientLayout>
             <NotificationProvider>
-              {children}
-              <Toaster />
-            </NotificationProvider> 
+              <WalletProvider>
+                {children}
+                <Toaster />
+              </WalletProvider>
+            </NotificationProvider>
           </ClientLayout>
         </I18nProvider>
       </body>
