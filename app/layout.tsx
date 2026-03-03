@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ClientLayout from "@/components/ClientLayout";
 import { NotificationProvider } from "@/context/NotificationContext";
+import { WalletProvider } from "@/context/WalletContext";
 import { Toaster } from "@/components/notifications/Toast";
 
 const geistSans = Geist({
@@ -39,8 +40,10 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans`}>
         <ClientLayout>
         <NotificationProvider>
-          {children}
-          <Toaster />
+          <WalletProvider>
+            {children}
+            <Toaster />
+          </WalletProvider>
         </NotificationProvider> 
         </ClientLayout>
       </body>
