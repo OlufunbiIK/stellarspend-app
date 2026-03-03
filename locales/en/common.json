@@ -1,0 +1,89 @@
+{
+  "common": {
+    "title": "StellarSpend",
+    "tagline": "Financial Freedom on the Blockchain",
+    "description": "Track spending, manage budgets, and build savings on the Stellar network.",
+    "back": "Back",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "language": "Language",
+    "settings": "Settings"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome back",
+    "balances": {
+      "title": "Your Balances",
+      "total": "Total Balance",
+      "available": "Available"
+    },
+    "quickActions": {
+      "title": "Quick Actions",
+      "send": "Send",
+      "receive": "Receive",
+      "swap": "Swap",
+      "history": "History"
+    },
+    "recentTransactions": {
+      "title": "Recent Transactions",
+      "viewAll": "View All",
+      "noTransactions": "No recent transactions"
+    }
+  },
+  "settings": {
+    "title": "Platform Settings",
+    "subtitle": "Tailor your transaction alerts and notification flows for a personalized experience.",
+    "notifications": {
+      "title": "Notification Preferences",
+      "subtitle": "Control which event types trigger real-time UI toasts.",
+      "successAlerts": "Success Alerts",
+      "successAlertsDesc": "Visual confirmation for successful operations like payment execution or profile updates.",
+      "systemErrors": "System Errors",
+      "systemErrorsDesc": "Immediate toasts when transactions fail, network connectivity issues occur, or validation errors arise.",
+      "informationTips": "Information & Tips",
+      "informationTipsDesc": "Non-critical messages, onboarding guidance, and general platform announcements."
+    },
+    "language": {
+      "title": "Language Preferences",
+      "subtitle": "Choose your preferred language for the interface.",
+      "selectLabel": "Select Language"
+    }
+  },
+  "transactions": {
+    "title": "Transactions",
+    "date": "Date",
+    "amount": "Amount",
+    "type": "Type",
+    "status": "Status",
+    "description": "Description"
+  },
+  "hero": {
+    "title": "Banking Without Borders",
+    "subtitle": "Empowering the unbanked with blockchain-based financial tools",
+    "cta": "Get Started"
+  },
+  "features": {
+    "budgets": {
+      "title": "Smart Budgeting",
+      "description": "AI-powered budget tracking and spending limits"
+    },
+    "savings": {
+      "title": "Savings Goals",
+      "description": "Set and track savings goals with automated contributions"
+    },
+    "tracking": {
+      "title": "Transaction Tracking",
+      "description": "Real-time transaction monitoring on the Stellar blockchain"
+    }
+  },
+  "offline": {
+    "banner": "You are currently offline. Some features may be limited.",
+    "queuedActions": "Queued Actions"
+  }
+}

@@ -3,7 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ClientLayout from "@/components/ClientLayout";
 import { NotificationProvider } from "@/context/NotificationContext";
+import { WalletProvider } from "@/context/WalletContext";
 import { Toaster } from "@/components/notifications/Toast";
+import { I18nProvider } from "@/components/I18nProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,7 +30,6 @@ export const metadata: Metadata = {
   },
 };
 
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -37,20 +38,24 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans`}>
-        <ClientLayout>
-        <NotificationProvider>
-          <a 
-            href="#main-content" 
-            className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-[#e8b84b] text-[#1a0f00] px-4 py-2 rounded-md font-semibold z-50 focus:outline-none focus:ring-2 focus:ring-[#e8b84b] focus:ring-offset-2 focus:ring-offset-[#080b18]"
-          >
-            Skip to main content
-          </a>
-          <div id="main-content">
-            {children}
-          </div>
-          <Toaster />
-        </NotificationProvider> 
-        </ClientLayout>
+        <I18nProvider initialLanguage="en">
+          <ClientLayout>
+            <NotificationProvider>
+              <WalletProvider>
+                <a 
+                  href="#main-content" 
+                  className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-[#e8b84b] text-[#1a0f00] px-4 py-2 rounded-md font-semibold z-50 focus:outline-none focus:ring-2 focus:ring-[#e8b84b] focus:ring-offset-2 focus:ring-offset-[#080b18]"
+                >
+                  Skip to main content
+                </a>
+                <div id="main-content">
+                  {children}
+                </div>
+                <Toaster />
+              </WalletProvider>
+            </NotificationProvider>
+          </ClientLayout>
+        </I18nProvider>
       </body>
     </html>
   );

@@ -1,0 +1,89 @@
+{
+  "common": {
+    "title": "StellarSpend",
+    "tagline": "Libertad Financiera en la Blockchain",
+    "description": "Rastrea gastos, administra presupuestos y ahorra en la red Stellar.",
+    "back": "Atrás",
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "close": "Cerrar",
+    "language": "Idioma",
+    "settings": "Configuración"
+  },
+  "dashboard": {
+    "title": "Panel de Control",
+    "welcome": "Bienvenido de nuevo",
+    "balances": {
+      "title": "Tus Saldos",
+      "total": "Saldo Total",
+      "available": "Disponible"
+    },
+    "quickActions": {
+      "title": "Acciones Rápidas",
+      "send": "Enviar",
+      "receive": "Recibir",
+      "swap": "Intercambiar",
+      "history": "Historial"
+    },
+    "recentTransactions": {
+      "title": "Transacciones Recientes",
+      "viewAll": "Ver Todas",
+      "noTransactions": "No hay transacciones recientes"
+    }
+  },
+  "settings": {
+    "title": "Configuración de Plataforma",
+    "subtitle": "Personaliza tus alertas de transacciones y flujos de notificación para una experiencia personalizada.",
+    "notifications": {
+      "title": "Preferencias de Notificación",
+      "subtitle": "Controla qué tipos de eventos activan notificaciones en tiempo real.",
+      "successAlerts": "Alertas de Éxito",
+      "successAlertsDesc": "Confirmación visual para operaciones exitosas como ejecución de pagos o actualizaciones de perfil.",
+      "systemErrors": "Errores del Sistema",
+      "systemErrorsDesc": "Notificaciones inmediatas cuando fallan transacciones, hay problemas de conectividad o errores de validación.",
+      "informationTips": "Información y Consejos",
+      "informationTipsDesc": "Mensajes no críticos, orientación de incorporación y anuncios generales de la plataforma."
+    },
+    "language": {
+      "title": "Preferencias de Idioma",
+      "subtitle": "Elige tu idioma preferido para la interfaz.",
+      "selectLabel": "Seleccionar Idioma"
+    }
+  },
+  "transactions": {
+    "title": "Transacciones",
+    "date": "Fecha",
+    "amount": "Monto",
+    "type": "Tipo",
+    "status": "Estado",
+    "description": "Descripción"
+  },
+  "hero": {
+    "title": "Banca Sin Fronteras",
+    "subtitle": "Empoderando a los no bancarizados con herramientas financieras basadas en blockchain",
+    "cta": "Comenzar"
+  },
+  "features": {
+    "budgets": {
+      "title": "Presupuesto Inteligente",
+      "description": "Seguimiento de presupuesto con IA y límites de gasto"
+    },
+    "savings": {
+      "title": "Metas de Ahorro",
+      "description": "Establece y rastrea metas de ahorro con contribuciones automatizadas"
+    },
+    "tracking": {
+      "title": "Seguimiento de Transacciones",
+      "description": "Monitoreo de transacciones en tiempo real en la blockchain Stellar"
+    }
+  },
+  "offline": {
+    "banner": "Actualmente estás sin conexión. Algunas funciones pueden estar limitadas.",
+    "queuedActions": "Acciones en Cola"
+  }
+}
