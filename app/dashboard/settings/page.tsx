@@ -2,13 +2,16 @@
 
 import React from "react";
 import { useNotifications } from "@/context/NotificationContext";
-import { Bell, Check, AlertCircle, Info as InfoIcon, ArrowLeft } from "lucide-react";
+import { Bell, Check, AlertCircle, Info as InfoIcon, ArrowLeft, Globe } from "lucide-react";
 import { Starfield } from "@/components/ui/Starfield";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import LanguageSelector from "@/components/settings/LanguageSelector";
+import { useI18n } from "@/components/I18nProvider";
 
 const SettingsPage = () => {
   const { preferences, updatePreferences } = useNotifications();
+  const { t } = useI18n();
 
   const togglePreference = (type: keyof typeof preferences) => {
     updatePreferences({ [type]: !preferences[type] });
@@ -156,6 +159,34 @@ const SettingsPage = () => {
           
           <div className="p-8 bg-white/[0.01] border-t border-white/5 flex justify-end">
             <p className="text-xs text-[#7a8aaa] italic">Settings are automatically synchronized to your local secure storage.</p>
+          </div>
+        </motion.div>
+
+        {/* Language Preferences Section */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="rounded-3xl border border-white/10 bg-white/[0.03] backdrop-blur-xl shadow-2xl overflow-hidden"
+        >
+          <div className="p-8 border-b border-white/5 bg-white/[0.02]">
+            <div className="flex items-center gap-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#e8b84b]/10 text-[#e8b84b] border border-[#e8b84b]/20">
+                <Globe className="w-6 h-6" />
+              </div>
+              <div className="space-y-1">
+                <h2 className="text-xl font-semibold text-white">Language Preferences</h2>
+                <p className="text-sm text-[#7a8aaa]">Choose your preferred language for the interface.</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="p-8">
+            <LanguageSelector variant="list" />
+          </div>
+          
+          <div className="p-8 bg-white/[0.01] border-t border-white/5 flex justify-end">
+            <p className="text-xs text-[#7a8aaa] italic">Your language preference is saved locally and persists across sessions.</p>
           </div>
         </motion.div>
       </div>

@@ -5,6 +5,7 @@ import ClientLayout from "@/components/ClientLayout";
 import { NotificationProvider } from "@/context/NotificationContext";
 import { WalletProvider } from "@/context/WalletContext";
 import { Toaster } from "@/components/notifications/Toast";
+import { I18nProvider } from "@/components/I18nProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,7 +30,6 @@ export const metadata: Metadata = {
   },
 };
 
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -38,14 +38,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans`}>
-        <ClientLayout>
-        <NotificationProvider>
-          <WalletProvider>
-            {children}
-            <Toaster />
-          </WalletProvider>
-        </NotificationProvider> 
-        </ClientLayout>
+        <I18nProvider initialLanguage="en">
+          <ClientLayout>
+            <NotificationProvider>
+              <WalletProvider>
+                {children}
+                <Toaster />
+              </WalletProvider>
+            </NotificationProvider>
+          </ClientLayout>
+        </I18nProvider>
       </body>
     </html>
   );
