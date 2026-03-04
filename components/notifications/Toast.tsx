@@ -35,7 +35,7 @@ export const Toast: React.FC<Notification> = ({ id, type, message }) => {
       <div className="flex-grow text-sm font-light tracking-wide leading-relaxed">{message}</div>
       <button
         onClick={() => removeToast(id)}
-        className="flex-shrink-0 p-1.5 rounded-xl hover:bg-white/10 transition-colors text-[#7a8aaa] hover:text-white"
+        className="flex-shrink-0 p-1.5 rounded-xl hover:bg-white/10 transition-colors text-[var(--color-text-secondary)] hover:text-white"
       >
         <X className="w-4 h-4" />
       </button>
