@@ -1,0 +1,59 @@
+/* Testimonial Component Styles */
+
+/* Smooth carousel transitions */
+.testimonial-carousel {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Ensure consistent card heights in grid */
+.testimonial-grid {
+  display: grid;
+  grid-auto-rows: 1fr;
+}
+
+/* Enhanced focus states for carousel controls */
+.testimonial-nav-button:focus-visible {
+  outline: 2px solid #e8b84b;
+  outline-offset: 4px;
+}
+
+/* Dot indicator animations */
+.testimonial-dot {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.testimonial-dot.active {
+  transform: scale(1.1);
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .testimonial-carousel * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .testimonial-card {
+    border-width: 2px;
+  }
+  
+  .testimonial-tag {
+    border-width: 2px;
+  }
+}
+
+/* Print styles */
+@media print {
+  .testimonial-nav-button,
+  .testimonial-dot {
+    display: none;
+  }
+  
+  .testimonial-carousel {
+    display: block;
+  }
+}
