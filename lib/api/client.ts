@@ -39,6 +39,16 @@ export interface Transaction {
   }[];
 }
 
+export interface Budget {
+  id: string;
+  name: string;
+  amount: number;
+  category: string;
+  asset: 'XLM' | 'USDC' | 'EURC';
+  startDate: string;
+  endDate: string;
+  createdAt: string;
+  updatedAt: string;
 export interface FilterParams {
   dateFrom?: string;
   dateTo?: string;
@@ -350,6 +360,31 @@ export const MOCK_TRANSACTIONS: Transaction[] = [
   },
 ];
 
+export const MOCK_BUDGETS: Budget[] = [
+  {
+    id: "budget_1",
+    name: "Monthly Groceries",
+    amount: 500,
+    category: "food",
+    asset: "USDC",
+    startDate: "2024-06-01",
+    endDate: "2024-06-30",
+    createdAt: "2024-05-20T10:00:00Z",
+    updatedAt: "2024-05-20T10:00:00Z",
+  },
+  {
+    id: "budget_2", 
+    name: "Transportation",
+    amount: 150,
+    category: "transport",
+    asset: "XLM",
+    startDate: "2024-06-01",
+    endDate: "2024-06-30",
+    createdAt: "2024-05-19T15:30:00Z",
+    updatedAt: "2024-05-19T15:30:00Z",
+  },
+];
+
 // ─── API Functions ──────────────────────────────────────────────────────────
 
 /**
@@ -450,4 +485,59 @@ export async function fetchRecentTransactions(
 ): Promise<Transaction[]> {
   await delay(300);
   return MOCK_TRANSACTIONS.slice(0, limit);
+}
+
+/**
+ * Fetch all budgets (mock — 200 ms latency).
+ */
+export async function fetchBudgets(): Promise<Budget[]> {
+  await delay(200);
+  return [...MOCK_BUDGETS];
+}
+
+/**
+ * Create a new budget (mock — 500 ms latency).
+ */
+export async function createBudget(budgetData: Omit<Budget, 'id' | 'createdAt' | 'updatedAt'>): Promise<Budget> {
+  await delay(500);
+  const newBudget: Budget = {
+    ...budgetData,
+    id: `budget_${Date.now()}`,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+  MOCK_BUDGETS.push(newBudget);
+  return newBudget;
+}
+
+/**
+ * Update an existing budget (mock — 400 ms latency).
+ */
+export async function updateBudget(id: string, budgetData: Partial<Omit<Budget, 'id' | 'createdAt'>>): Promise<Budget> {
+  await delay(400);
+  const budgetIndex = MOCK_BUDGETS.findIndex(b => b.id === id);
+  if (budgetIndex === -1) {
+    throw new Error('Budget not found');
+  }
+  
+  MOCK_BUDGETS[budgetIndex] = {
+    ...MOCK_BUDGETS[budgetIndex],
+    ...budgetData,
+    updatedAt: new Date().toISOString(),
+  };
+  
+  return MOCK_BUDGETS[budgetIndex];
+}
+
+/**
+ * Delete a budget (mock — 300 ms latency).
+ */
+export async function deleteBudget(id: string): Promise<void> {
+  await delay(300);
+  const budgetIndex = MOCK_BUDGETS.findIndex(b => b.id === id);
+  if (budgetIndex === -1) {
+    throw new Error('Budget not found');
+  }
+  
+  MOCK_BUDGETS.splice(budgetIndex, 1);
 }
