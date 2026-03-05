@@ -42,7 +42,7 @@ export default function TestimonialsSection() {
           <h2 className="font-display text-white text-4xl md:text-5xl mb-4 tracking-tight">
             Trusted by <span className="text-[#e8b84b]">thousands</span>
           </h2>
-          <p className="text-[#7a8aaa] text-lg max-w-2xl mx-auto">
+          <p className="text-[var(--color-text-secondary)] text-lg max-w-2xl mx-auto">
             See what our users are saying about their experience with StellarSpend.
           </p>
         </motion.div>

@@ -79,47 +79,54 @@ export default function BudgetForm({ onSubmit, onCancel, initialData, isEditing 
             </h2>
 
             <form onSubmit={handleSubmit(handleSubmitForm as any)} className="space-y-4">
+            <form onSubmit={handleSubmit(onSubmit as any)} className="space-y-4" noValidate>
                 <div className="space-y-1">
                     <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                        Budget Name
+                        Budget Name <span className="text-red-500" aria-label="required">*</span>
                     </label>
                     <input
                         id="name"
                         {...register('name')}
+                        aria-invalid={errors.name ? 'true' : 'false'}
+                        aria-describedby={errors.name ? 'name-error' : undefined}
                         className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 outline-none transition-colors ${errors.name ? 'border-red-500 bg-red-50' : 'border-gray-300 dark:border-gray-600 dark:bg-gray-700'
                             }`}
                         placeholder="e.g. Groceries"
                     />
                     {errors.name && (
-                        <p className="text-xs text-red-500 mt-1">{errors.name.message}</p>
+                        <p id="name-error" className="text-xs text-red-500 mt-1" role="alert">{errors.name.message}</p>
                     )}
                 </div>
 
                 <div className="space-y-1">
                     <label htmlFor="amount" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                        Amount (XLM)
+                        Amount (XLM) <span className="text-red-500" aria-label="required">*</span>
                     </label>
                     <input
                         id="amount"
                         type="number"
                         step="0.01"
                         {...register('amount')}
+                        aria-invalid={errors.amount ? 'true' : 'false'}
+                        aria-describedby={errors.amount ? 'amount-error' : undefined}
                         className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 outline-none transition-colors ${errors.amount ? 'border-red-500 bg-red-50' : 'border-gray-300 dark:border-gray-600 dark:bg-gray-700'
                             }`}
                         placeholder="0.00"
                     />
                     {errors.amount && (
-                        <p className="text-xs text-red-500 mt-1">{errors.amount.message}</p>
+                        <p id="amount-error" className="text-xs text-red-500 mt-1" role="alert">{errors.amount.message}</p>
                     )}
                 </div>
 
                 <div className="space-y-1">
                     <label htmlFor="category" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                        Category
+                        Category <span className="text-red-500" aria-label="required">*</span>
                     </label>
                     <select
                         id="category"
                         {...register('category')}
+                        aria-invalid={errors.category ? 'true' : 'false'}
+                        aria-describedby={errors.category ? 'category-error' : undefined}
                         className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 outline-none transition-colors ${errors.category ? 'border-red-500 bg-red-50' : 'border-gray-300 dark:border-gray-600 dark:bg-gray-700'
                             }`}
                     >
@@ -131,7 +138,7 @@ export default function BudgetForm({ onSubmit, onCancel, initialData, isEditing 
                         <option value="entertainment">Entertainment</option>
                     </select>
                     {errors.category && (
-                        <p className="text-xs text-red-500 mt-1">{errors.category.message}</p>
+                        <p id="category-error" className="text-xs text-red-500 mt-1" role="alert">{errors.category.message}</p>
                     )}
                 </div>
 
@@ -204,6 +211,43 @@ export default function BudgetForm({ onSubmit, onCancel, initialData, isEditing 
                         {isSubmitting ? 'Saving...' : (isEditing ? 'Update Budget' : 'Save Budget')}
                     </button>
                 </div>
+                    <fieldset className="space-y-2">
+                        <legend className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Period <span className="text-red-500" aria-label="required">*</span>
+                        </legend>
+                        <div className="flex space-x-4" role="group" aria-describedby="period-error">
+                            {['daily', 'monthly', 'quarterly'].map((p) => (
+                                <label key={p} className="flex items-center space-x-2 cursor-pointer">
+                                    <input
+                                        type="radio"
+                                        value={p}
+                                        {...register('period')}
+                                        className="w-4 h-4 text-blue-600"
+                                        aria-invalid={errors.period ? 'true' : 'false'}
+                                    />
+                                    <span className="text-sm capitalize text-gray-600 dark:text-gray-400">{p}</span>
+                                </label>
+                            ))}
+                        </div>
+                        {errors.period && (
+                            <p id="period-error" className="text-xs text-red-500 mt-1" role="alert">{errors.period.message}</p>
+                        )}
+                    </fieldset>
+                </div>
+
+                <button
+                    type="submit"
+                    disabled={!isValid || isSubmitting}
+                    className="w-full mt-6 px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white font-semibold rounded-lg shadow-md transition-colors duration-200"
+                    aria-describedby={(!isValid || isSubmitting) ? 'submit-help' : undefined}
+                >
+                    {isSubmitting ? 'Saving...' : 'Save Budget'}
+                </button>
+                {(!isValid || isSubmitting) && (
+                    <p id="submit-help" className="text-xs text-gray-500 mt-1">
+                        Please fill all required fields correctly before submitting.
+                    </p>
+                )}
             </form>
         </div>
     );

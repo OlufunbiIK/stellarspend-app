@@ -47,7 +47,7 @@ export default function TestimonialCard({
         </div>
         <div>
           <p className="text-white font-semibold text-sm">{author}</p>
-          <p className="text-[#7a8aaa] text-xs">{role}</p>
+          <p className="text-[var(--color-text-secondary)] text-xs">{role}</p>
         </div>
       </div>
     </motion.div>

@@ -101,8 +101,8 @@ export default function RecentTransactions() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchTransactions(3).then((data) => {
-      setTxs(data);
+    fetchTransactions(undefined, 1, 3).then((response) => {
+      setTxs(response.data);
       setLoading(false);
     });
   }, []);

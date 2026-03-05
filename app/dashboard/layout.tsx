@@ -49,7 +49,7 @@ export default function DashboardLayout({
       />
 
       {/* Mobile top bar */}
-      <header className="relative z-30 flex items-center justify-between px-5 py-4 border-b border-white/5 bg-[#080b18]/80 backdrop-blur-xl lg:hidden">
+      <header className="fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-5 py-4 border-b border-white/5 bg-[#080b18]/80 backdrop-blur-xl lg:hidden">
         <div className="flex items-center gap-2">
           <Gauge className="w-5 h-5 text-[#e8b84b]" />
           <span className="text-base font-black text-white uppercase tracking-widest">
@@ -80,14 +80,14 @@ export default function DashboardLayout({
         />
       )}
 
-      <div className="relative z-10 flex min-h-screen">
+      <div className="relative z-10 h-screen flex pt-[73px] lg:pt-0">
         {/* Sidebar */}
         <aside
           className={`
-            fixed top-0 left-0 h-full w-64 z-30 flex flex-col
+            fixed top-[73px] left-0 h-[calc(100vh-73px)] w-64 z-30 flex flex-col
             bg-[#080b18]/95 backdrop-blur-2xl border-r border-white/5
             transition-transform duration-300 ease-in-out
-            lg:static lg:translate-x-0
+            lg:static lg:top-0 lg:h-screen lg:translate-x-0
             ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
           `}
         >
@@ -153,7 +153,7 @@ export default function DashboardLayout({
                 </span>
               </div>
             </div>
-            
+
             {/* Language selector in sidebar */}
             <div className="pt-4 border-t border-white/5">
               <LanguageSelector variant="dropdown" />
@@ -162,7 +162,9 @@ export default function DashboardLayout({
         </aside>
 
         {/* Main */}
-        <main className="flex-1 min-w-0 p-4 md:p-8 lg:p-10">{children}</main>
+        <main className="flex-1 min-w-0 h-full overflow-y-auto p-4 md:p-8 lg:p-10">
+          {children}
+        </main>
       </div>
     </div>
   );
