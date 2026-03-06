@@ -1,16 +1,35 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useWalletContext, Wallet } from "@/context/WalletContext";
 
+// ── Freighter browser extension type declaration ──────────────────────────────
+declare global {
+  interface Window {
+    freighter?: {
+      isConnected: () => Promise<boolean>;
+      getPublicKey: () => Promise<string>;
+      requestAccess: () => Promise<string>;
+      signTransaction: (xdr: string, network: string) => Promise<string>;
+    };
+  }
+}
+
+// ── Types ─────────────────────────────────────────────────────────────────────
+export interface FreighterState {
+  isInstalled: boolean;
+  isConnected: boolean;
+  publicKey: string | null;
+  isConnecting: boolean;
+  freighterError: string | null; // named freighterError to avoid clash with wallet context `error`
+}
+
 export interface UseWalletReturn {
-  // State
+  // Wallet context state
   wallets: Wallet[];
   selectedWallet: Wallet | null;
   isLoading: boolean;
   error: string | null;
-  
-  // Actions
   addWallet: (wallet: Omit<Wallet, "id" | "createdAt">) => void;
   removeWallet: (id: string) => void;
   selectWallet: (id: string) => void;
@@ -18,7 +37,10 @@ export interface UseWalletReturn {
   updateWalletName: (id: string, name: string) => void;
   setDefaultWallet: (id: string) => void;
   refreshBalances: () => Promise<void>;
-  
+  // Freighter
+  freighter: FreighterState;
+  connectFreighter: () => Promise<void>;
+  disconnectFreighter: () => void;
   // Helpers
   getWalletById: (id: string) => Wallet | undefined;
   getWalletByAddress: (address: string) => Wallet | undefined;
@@ -26,36 +48,86 @@ export interface UseWalletReturn {
   getTotalBalance: () => { xlm: string; usdc: string; eurc: string };
 }
 
-/**
- * Hook for managing wallet operations and accessing wallet state.
- * Provides a convenient interface for components to interact with wallet functionality.
- * 
- * @example
- * ```tsx
- * const { wallets, selectedWallet, selectWallet, addWallet } = useWallet();
- * ```
- */
+// ── Hook ──────────────────────────────────────────────────────────────────────
 export function useWallet(): UseWalletReturn {
   const context = useWalletContext();
 
+  const [freighterState, setFreighterState] = useState<FreighterState>({
+    isInstalled: false,
+    isConnected: false,
+    publicKey: null,
+    isConnecting: false,
+    freighterError: null,
+  });
+
+  const connectFreighter = useCallback(async () => {
+    const installed = typeof window !== "undefined" && !!window.freighter;
+
+    if (!installed) {
+      setFreighterState((s) => ({
+        ...s,
+        isInstalled: false,
+        freighterError: "Freighter not found. Install the extension to continue.",
+      }));
+      window.open("https://freighter.app", "_blank", "noopener,noreferrer");
+      return;
+    }
+
+    setFreighterState((s) => ({
+      ...s,
+      isInstalled: true,
+      isConnecting: true,
+      freighterError: null,
+    }));
+
+    try {
+      const publicKey = await window.freighter!.requestAccess();
+      if (!publicKey) throw new Error("No public key returned.");
+
+      setFreighterState((s) => ({
+        ...s,
+        isConnected: true,
+        publicKey,
+        isConnecting: false,
+        freighterError: null,
+      }));
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Failed to connect Freighter.";
+      setFreighterState((s) => ({
+        ...s,
+        isConnected: false,
+        publicKey: null,
+        isConnecting: false,
+        freighterError: message,
+      }));
+    }
+  }, []);
+
+  const disconnectFreighter = useCallback(() => {
+    setFreighterState((s) => ({
+      ...s,
+      isConnected: false,
+      publicKey: null,
+      freighterError: null,
+    }));
+  }, []);
+
   const getWalletById = useCallback(
-    (id: string) => {
-      return context.wallets.find((w) => w.id === id);
-    },
+    (id: string) => context.wallets.find((w) => w.id === id),
     [context.wallets]
   );
 
   const getWalletByAddress = useCallback(
-    (address: string) => {
-      return context.wallets.find(
+    (address: string) =>
+      context.wallets.find(
         (w) => w.address.toLowerCase() === address.toLowerCase()
-      );
-    },
+      ),
     [context.wallets]
   );
 
   const formatAddress = useCallback(
-    (address: string, start = 4, end = 4) => {
+    (address: string, start = 4, end = 4): string => {
       if (address.length <= start + end) return address;
       return `${address.slice(0, start)}...${address.slice(-end)}`;
     },
@@ -64,29 +136,20 @@ export function useWallet(): UseWalletReturn {
 
   const getTotalBalance = useCallback(() => {
     return context.wallets.reduce(
-      (totals, wallet) => {
-        const xlm = parseFloat(wallet.balance.xlm) || 0;
-        const usdc = parseFloat(wallet.balance.usdc || "0") || 0;
-        const eurc = parseFloat(wallet.balance.eurc || "0") || 0;
-        
-        return {
-          xlm: (parseFloat(totals.xlm) + xlm).toFixed(2),
-          usdc: (parseFloat(totals.usdc) + usdc).toFixed(2),
-          eurc: (parseFloat(totals.eurc) + eurc).toFixed(2),
-        };
-      },
+      (acc, w) => ({
+        xlm: (parseFloat(acc.xlm) + (parseFloat(w.balance.xlm) || 0)).toFixed(2),
+        usdc: (parseFloat(acc.usdc) + (parseFloat(w.balance.usdc || "0") || 0)).toFixed(2),
+        eurc: (parseFloat(acc.eurc) + (parseFloat(w.balance.eurc || "0") || 0)).toFixed(2),
+      }),
       { xlm: "0.00", usdc: "0.00", eurc: "0.00" }
     );
   }, [context.wallets]);
 
   return {
-    // State
     wallets: context.wallets,
     selectedWallet: context.selectedWallet,
     isLoading: context.isLoading,
     error: context.error,
-    
-    // Actions
     addWallet: context.addWallet,
     removeWallet: context.removeWallet,
     selectWallet: context.selectWallet,
@@ -94,8 +157,9 @@ export function useWallet(): UseWalletReturn {
     updateWalletName: context.updateWalletName,
     setDefaultWallet: context.setDefaultWallet,
     refreshBalances: context.refreshBalances,
-    
-    // Helpers
+    freighter: freighterState,
+    connectFreighter,
+    disconnectFreighter,
     getWalletById,
     getWalletByAddress,
     formatAddress,
