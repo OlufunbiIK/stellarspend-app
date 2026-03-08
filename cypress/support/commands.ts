@@ -1,7 +1,9 @@
 /// <reference types="cypress" />
 
-// -------------------- Module Augmentation --------------------
+export {};
+
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Cypress {
     interface Chainable {
       mockFreighter(): Chainable<void>;
@@ -19,7 +21,6 @@ declare global {
   }
 }
 
-// -------------------- Cypress Commands --------------------
 Cypress.Commands.add("mockFreighter", (): Cypress.Chainable<void> => {
   return cy.fixture("wallet").then((wallet) => {
     cy.window().then((win) => {
@@ -54,5 +55,3 @@ Cypress.Commands.add("mockStellarAPI", () => {
     }).as("submitTransaction");
   });
 });
-
-export {}; // Make this a module

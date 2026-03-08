@@ -28,23 +28,20 @@ describe("User Journey: Landing → Wallet → Budget → Transaction", () => {
     cy.mockFreighter();
 
     cy.window().then((win) => {
-      const freighter = win.freighter;
+      const { freighter } = win;
       expect(freighter).to.exist;
-
-      // Remove void; chain promises correctly
-      return freighter
-        .getPublicKey()
-        .then((key) => {
-          expect(key).to.equal(
-            "GDQP2KPQGKIHYJGXNUIYOMHARUARCA7DJT5FO2FFOOKY3B2WSQHG4W37",
-          );
-        })
-        .then(() => {
-          return freighter.isConnected().then((connected) => {
-            expect(connected).to.be.true;
-          });
-        });
     });
+
+    cy.window()
+      .then((win) => win.freighter.getPublicKey())
+      .should(
+        "equal",
+        "GDQP2KPQGKIHYJGXNUIYOMHARUARCA7DJT5FO2FFOOKY3B2WSQHG4W37",
+      );
+
+    cy.window()
+      .then((win) => win.freighter.isConnected())
+      .should("equal", true);
   });
 
   it("should create a budget", () => {
