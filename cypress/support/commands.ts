@@ -1,16 +1,29 @@
 /// <reference types="cypress" />
 
-declare namespace Cypress {
-  interface Chainable {
-    mockFreighter(): Chainable<void>;
-    mockStellarAPI(): Chainable<void>;
+// -------------------- Module Augmentation --------------------
+declare global {
+  namespace Cypress {
+    interface Chainable {
+      mockFreighter(): Chainable<void>;
+      mockStellarAPI(): Chainable<void>;
+    }
+  }
+
+  interface Window {
+    freighter: {
+      isConnected: () => Promise<boolean>;
+      getPublicKey: () => Promise<string>;
+      getNetwork: () => Promise<string>;
+      signTransaction: (xdr: string) => Promise<{ signedXDR: string }>;
+    };
   }
 }
 
-Cypress.Commands.add('mockFreighter', () => {
-  cy.fixture('wallet').then((wallet) => {
+// -------------------- Cypress Commands --------------------
+Cypress.Commands.add("mockFreighter", (): Cypress.Chainable<void> => {
+  return cy.fixture("wallet").then((wallet) => {
     cy.window().then((win) => {
-      (win as any).freighter = {
+      win.freighter = {
         isConnected: () => Promise.resolve(wallet.isConnected),
         getPublicKey: () => Promise.resolve(wallet.publicKey),
         getNetwork: () => Promise.resolve(wallet.network),
@@ -20,26 +33,26 @@ Cypress.Commands.add('mockFreighter', () => {
   });
 });
 
-Cypress.Commands.add('mockStellarAPI', () => {
-  cy.fixture('transaction').then((transaction) => {
-    cy.intercept('GET', '**/accounts/**', {
+Cypress.Commands.add("mockStellarAPI", () => {
+  return cy.fixture("transaction").then((transaction) => {
+    cy.intercept("GET", "**/accounts/**", {
       statusCode: 200,
       body: {
-        id: 'GDQP2KPQGKIHYJGXNUIYOMHARUARCA7DJT5FO2FFOOKY3B2WSQHG4W37',
-        balances: [{ asset_type: 'native', balance: '10000.0000000' }],
+        id: "GDQP2KPQGKIHYJGXNUIYOMHARUARCA7DJT5FO2FFOOKY3B2WSQHG4W37",
+        balances: [{ asset_type: "native", balance: "10000.0000000" }],
       },
-    }).as('getAccount');
+    }).as("getAccount");
 
-    cy.intercept('GET', '**/transactions**', {
+    cy.intercept("GET", "**/transactions**", {
       statusCode: 200,
-      body: {
-        _embedded: { records: [transaction] },
-      },
-    }).as('getTransactions');
+      body: { _embedded: { records: [transaction] } },
+    }).as("getTransactions");
 
-    cy.intercept('POST', '**/transactions', {
+    cy.intercept("POST", "**/transactions", {
       statusCode: 200,
-      body: { hash: 'mock-tx-hash', successful: true },
-    }).as('submitTransaction');
+      body: { hash: "mock-tx-hash", successful: true },
+    }).as("submitTransaction");
   });
 });
+
+export {}; // Make this a module
