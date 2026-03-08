@@ -12,9 +12,8 @@ describe("User Journey: Landing → Wallet → Budget → Transaction", () => {
     cy.contains("full control").should("be.visible");
     cy.contains("of your money").should("be.visible");
 
-    cy.contains("Get started")
-      .should("be.visible")
-      .and("have.attr", "href", "/sign-in");
+    cy.get("button").contains("Get Started").click();
+    cy.url().should("include", "/sign-in");
     cy.contains("Read the docs")
       .should("be.visible")
       .and("have.attr", "href", "/docs");
