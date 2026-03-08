@@ -112,18 +112,13 @@ export default function Hero() {
 
         {/* CTA buttons */}
         <motion.div
-          className="flex flex-wrap items-center justify-center gap-3 mb-4 w-full p-0.5 "
+          className="flex flex-wrap items-center justify-center gap-3 mb-4 w-full p-0.5"
           variants={fadeUp}
           transition={{ duration: 0.5, ease: "easeOut" }}
         >
-          {/* Primary */}
-          <button
-            onClick={() =>
-              addNotification(
-                "success",
-                "Welcome to StellarSpend! Your journey to financial freedom starts here.",
-              )
-            }
+          {/* Primary — navigates to /sign-in */}
+          <a
+            href="/sign-in"
             aria-label="Get started"
             className="inline-flex items-center gap-2.5 px-6 py-2.5 rounded-full font-semibold text-base transition-all duration-200
                        bg-[#e8b84b] text-[#1a0f00]
@@ -133,9 +128,20 @@ export default function Hero() {
           >
             Get started
             <ArrowRight size={18} aria-hidden="true" />
-          </button>
+          </a>
 
-          {/* Secondary */}
+          {/* Docs link — navigates to /docs */}
+          <a
+            href="/docs"
+            className="inline-flex items-center gap-2.5 px-6 py-2.5 rounded-full font-medium text-base transition-all duration-200
+                       border border-white/20 text-white/70
+                       hover:border-white/40 hover:text-white hover:-translate-y-0.5
+                       active:translate-y-0"
+          >
+            Read the docs
+          </a>
+
+          {/* Secondary — fires error notification simulation */}
           <button
             onClick={() =>
               addNotification(
@@ -151,6 +157,7 @@ export default function Hero() {
             Simulate Error
           </button>
         </motion.div>
+
         {/* Divider */}
         <motion.div
           className="w-full max-w-sm h-px bg-linear-to-r from-transparent via-white/10 to-transparent mb-12"

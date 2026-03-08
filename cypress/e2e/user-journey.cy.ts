@@ -12,8 +12,11 @@ describe("User Journey: Landing → Wallet → Budget → Transaction", () => {
     cy.contains("full control").should("be.visible");
     cy.contains("of your money").should("be.visible");
 
-    cy.get("button").contains("Get Started").click();
+    cy.contains("a", "Get started").click();
     cy.url().should("include", "/sign-in");
+
+    cy.go("back");
+
     cy.contains("Read the docs")
       .should("be.visible")
       .and("have.attr", "href", "/docs");
@@ -73,12 +76,12 @@ describe("User Journey: Landing → Wallet → Budget → Transaction", () => {
   it("should navigate CTAs correctly", () => {
     cy.visit("/");
 
-    cy.contains("Get started").click();
+    cy.contains("a", "Get started").click();
     cy.url().should("include", "/sign-in");
 
     cy.go("back");
 
-    cy.contains("Read the docs").click();
+    cy.contains("a", "Read the docs").click();
     cy.url().should("include", "/docs");
   });
 });
